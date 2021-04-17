@@ -1,10 +1,12 @@
 <template>
   <section>
-    <article v-if="!gridView">
-      <button id="toggleBtn" @click="gridView = true">
-        Change To Grid View
-      </button>
-      <div id="listView" v-for="tweetInfo in tweets" :key="tweetInfo.id">
+    <!-- Button outside of grid -->
+    <button id="toggleBtn" @click="changeView">
+      Toggle View
+    </button>
+    <article id="viewType">
+      <!-- forIn loop to create list/grid, Loops include outer html when running -->
+      <div class="listView" v-for="tweetInfo in tweets" :key="tweetInfo.id">
         {{ tweetInfo.tweet }}
         <div class="infoGrid">
           <p class="createdBy">
@@ -16,33 +18,22 @@
         </div>
       </div>
     </article>
-    <article v-else>
-      <button id="toggleBtn" @click="gridView = false">
-        Change To List View
-      </button>
-      <div id="gridView">
-        <div class="gridItem" v-for="tweetInfo in tweets" :key="tweetInfo.id">
-          {{ tweetInfo.tweet }}
-          <div class="infoGrid">
-            <p class="createdBy">
-              <span class="byOn">By:</span> {{ tweetInfo.username }}
-            </p>
-            <p class="createdOn">
-              <span class="byOn">On:</span> {{ tweetInfo.created_at }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </article>
   </section>
 </template>
 
 <script>
 export default {
+  // functions go inside methods.
+  methods: {
+    // function to get element with ID "viewType" and toggle class, used in the @click event above
+    changeView() {
+      document.getElementById("viewType").classList.toggle("gridView");
+    },
+  },
+
   name: "user-tweets",
   data() {
     return {
-      gridView: false,
       tweets: [
         {
           tweet: `Getting older. I used to be able to run a 4-minute mile, bench press 380 pounds, and tell the truth.`,
@@ -141,7 +132,7 @@ article {
   place-items: center;
 }
 
-#listView {
+.listView {
   display: grid;
   place-items: center;
   background-color: #28293d;
@@ -152,7 +143,7 @@ article {
   width: 80%;
 }
 
-#gridView {
+.gridView {
   display: grid;
   place-items: center;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
